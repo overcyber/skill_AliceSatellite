@@ -1,5 +1,7 @@
 # AliceSatellite
 
+[![Continous Integration](https://gitlab.com/project-alice-assistant/skills/skill_AliceSatellite/badges/master/pipeline.svg)](https://gitlab.com/project-alice-assistant/skills/skill_AliceSatellite/pipelines/latest)
+
 ### Download
 
 ##### > WGET method
