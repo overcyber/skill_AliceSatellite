@@ -1,6 +1,7 @@
 {
 	"name": "AliceSatellite",
 	"version": "1.0.10",
+	"icon": "battle-net",
 	"author": "ProjectAlice",
 	"maintainers": [
 		"Psycho",
