@@ -13,7 +13,7 @@ wget http://skills.projectalice.ch/AliceSatellite \
 ### Description
 AliceSatellite is the official skill to support Project Alice satellites
 
-- Version: 1.0.10
+- Version: 1.0.11
 - Author: ProjectAlice
 - Maintainers:
   - Psycho, Jierka, maxbachmann
