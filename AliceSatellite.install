@@ -2,7 +2,7 @@
 	"name": "AliceSatellite",
 	"version": "1.0.11",
 	"icon": "fab fa-battle-net",
-	"category": "undefined",
+	"category": "alice",
 	"author": "ProjectAlice",
 	"maintainers": [
 		"Psycho",
