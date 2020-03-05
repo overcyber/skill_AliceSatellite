@@ -2,14 +2,6 @@
 
 [![Continous Integration](https://gitlab.com/project-alice-assistant/skills/skill_AliceSatellite/badges/master/pipeline.svg)](https://gitlab.com/project-alice-assistant/skills/skill_AliceSatellite/pipelines/latest)
 
-### Download
-
-##### > WGET method
-```bash
-wget http://skills.projectalice.ch/AliceSatellite \
--O ~/ProjectAlice/system/skillInstallTickets/AliceSatellite.install
-```
-
 ### Description
 AliceSatellite is the official skill to support Project Alice satellites
 
