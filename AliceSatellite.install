@@ -1,7 +1,7 @@
 {
 	"name": "AliceSatellite",
-	"version": "1.0.11",
-	"icon": "fab fa-battle-net",
+	"version": "1.0.12",
+	"icon": "fas fa-satellite",
 	"category": "alice",
 	"author": "ProjectAlice",
 	"maintainers": [

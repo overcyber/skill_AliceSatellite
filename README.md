@@ -5,7 +5,7 @@
 ### Description
 AliceSatellite is the official skill to support Project Alice satellites
 
-- Version: 1.0.11
+- Version: 1.0.12
 - Author: ProjectAlice
 - Maintainers:
   - Psycho, Jierka, maxbachmann
