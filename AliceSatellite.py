@@ -13,8 +13,10 @@ class AliceSatellite(AliceSkill):
 
 	def onBooted(self):
 		confManager = SuperManager.getInstance().configManager
-		if confManager.configAliceExists('onReboot') and confManager.getAliceConfigByName('onReboot') == 'greetAndRebootSkillss':
-			self.restartDevice()
+		if confManager.configAliceExists('onReboot') and confManager.getAliceConfigByName('onReboot') == 'greetAndRebootDevices':
+			self.DeviceManager.broadcastToDevices(
+				topic='projectalice/devices/restart'
+			)
 
 
 	def onSleep(self):
@@ -33,14 +35,14 @@ class AliceSatellite(AliceSkill):
 		self.getSensorReadings()
 
 
-	@MqttHandler('projectalice/devices/alice/sensorsFeedback')
+	@MqttHandler('projectalice/devices/sensorsFeedback')
 	def feedbackSensorIntent(self, session: DialogSession):
 		data = session.payload.get('data')
 		if data:
 			self._sensorReadings[session.siteId] = data
 
 
-	@MqttHandler('projectalice/devices/alice/disconnection')
+	@MqttHandler('projectalice/devices/disconnection')
 	def deviceDisconnectIntent(self, session: DialogSession):
 		uid = session.payload.get('uid')
 		if uid:
@@ -57,9 +59,3 @@ class AliceSatellite(AliceSkill):
 
 	def getSensorValue(self, siteId: str, value: str) -> str:
 		return self._sensorReadings.get(siteId, dict()).get(value, 'undefined')
-
-
-	def restartDevice(self):
-		devices = self.DeviceManager.getDevicesByType(deviceType=self.name, connectedOnly=True, onlyOne=False)
-		for device in devices:
-			self.publish(topic='projectalice/devices/restart', payload={'uid': device.uid})
