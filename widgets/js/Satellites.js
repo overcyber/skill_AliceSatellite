@@ -19,7 +19,7 @@
 			let device = JSON.parse(devices[id]);
 
 			let color = device['connected'] ? '--text' : 'red';
-			let $tile = $('<div class="Satellites_tile" id="' + device['uid'] + '">' +
+			let $tile = $('<div class="tile" id="' + device['uid'] + '">' +
 					'<div class="Satellites_tile_deviceName ' + color + '">' + device['room'] + '</div>' +
 					'<div class="Satellites_tile_muteUnmute"><i class="fas fa-microphone-alt fa-4x" aria-hidden="true" id="Satellites_muteUnmute_' + device['uid'] + '"></i></div>');
 
