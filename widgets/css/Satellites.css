@@ -16,9 +16,7 @@
 	box-sizing: border-box;
 }
 
-.Satellites_tile_deviceName {
-	font-family: var(--readable);
-}
+.Satellites_tile_deviceName { font-family: var(--readable); }
 
 .Satellites_tile_muteUnmute {
 	width: 100%;
