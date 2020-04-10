@@ -19,15 +19,28 @@
 			let device = JSON.parse(devices[id]);
 
 			let color = device['connected'] ? '--text' : 'red';
-			let $tile = $('<div class="tile" id="' + device['uid'] + '">' +
-					'<div class="Satellites_tile_deviceName ' + color + '">' + device['room'] + '</div>' +
-					'<div class="Satellites_tile_muteUnmute"><i class="fas fa-microphone-alt fa-4x" aria-hidden="true" id="Satellites_muteUnmute_' + device['uid'] + '"></i></div>');
+			let $tile = $('<div class="tile" id="' + device['uid'] + '"><div class="Satellites_tile_deviceName ' + color + '">' + device['room'] + '</div>');
 
-			$tile.append(
-				'<div class="Satellites_tile_heartbeat"><i class="fas fa-heart-broken fa-2x" aria-hidden="true" id="Satellites_heartbeat_' + device['uid'] + '"></i></div>'
-			);
+			let $button = $('<div class="Satellites_tile_muteUnmute"><i class="fas fa-microphone-alt fa-4x" aria-hidden="true" id="Satellites_muteUnmute_' + device['uid'] + '"></i></div>');
+			$button.on('click touchstart', function(){
+				$.ajax({
+					url: '/home/widget/',
+					data: JSON.stringify({
+						skill: 'AliceSatellite',
+						widget: 'Satellites',
+						func: 'toggleMute',
+						param: JSON.stringify({
+							'uid': device['uid']
+						})
+					}),
+					contentType: 'application/json',
+					dataType: 'json',
+					type: 'POST'
+				});
+			})
 
-			$tile.append('</div>');
+			let $heartbeat = $('<div class="Satellites_tile_heartbeat"><i class="fas fa-heart-broken fa-2x" aria-hidden="true" id="Satellites_heartbeat_' + device['uid'] + '"></i></div>');
+			$tile.append($button, $heartbeat, '</div>')
 			$('#Satellites_satelliteContainer').append($tile);
 		}
 	});
@@ -36,6 +49,7 @@
 		MQTT.subscribe('projectalice/devices/heartbeat');
 		MQTT.subscribe('projectalice/devices/stopListen');
 		MQTT.subscribe('projectalice/devices/startListen');
+		MQTT.subscribe('projectalice/devices/toggleListen');
 		MQTT.subscribe('projectalice/devices/disconnection');
 		MQTT.subscribe('projectalice/devices/greeting');
 	}
@@ -70,6 +84,12 @@
 			$('#Satellites_muteUnmute_' + payload['uid']).removeClass('fa-microphone-alt').addClass('fa-microphone-alt-slash');
 		} else if (msg.topic === 'projectalice/devices/startListen') {
 			$('#Satellites_muteUnmute_' + payload['uid']).removeClass('fa-microphone-alt-slash').addClass('fa-microphone-alt');
+		} else if (msg.topic === 'projectalice/devices/toggleListen') {
+			if ($('#Satellites_muteUnmute_' + payload['uid']).hasClass('fa-microphone-alt-slash')) {
+				$('#Satellites_muteUnmute_' + payload['uid']).removeClass('fa-microphone-alt-slash').addClass('fa-microphone-alt');
+			} else {
+				$('#Satellites_muteUnmute_' + payload['uid']).removeClass('fa-microphone-alt').addClass('fa-microphone-alt-slash');
+			}
 		} else if (msg.topic == 'projectalice/devices/disconnection') {
 			deadSatellite(payload['uid'])
 		} else if (msg.topic == 'projectalice/devices/greeting') {

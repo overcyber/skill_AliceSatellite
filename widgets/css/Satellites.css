@@ -6,6 +6,7 @@
 	text-align: center;
 	margin-top: 1em;
 	display: block;
+	cursor: pointer;
 }
 
 .Satellites_tile_heartbeat {
