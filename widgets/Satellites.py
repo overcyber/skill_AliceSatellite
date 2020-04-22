@@ -1,13 +1,13 @@
 import sqlite3
 
 from core.base.model.Widget import Widget
-from core.base.model.widgetSizes import WidgetSizes
+from core.base.model.WidgetSizes import WidgetSizes
 from core.commons import constants
 
 
 class Satellites(Widget):
-	SIZE = WidgetSizes.w_large_wide
-	OPTIONS: dict = dict()
+	DEFAULT_SIZE = WidgetSizes.w_large_wide
+	DEFAULT_OPTIONS: dict = dict()
 
 
 	def __init__(self, data: sqlite3.Row):
