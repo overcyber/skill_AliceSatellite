@@ -20,7 +20,6 @@ class Satellites(Widget):
 
 	def toggleMute(self, uid: str):
 		device = self.DeviceManager.getDeviceByUID(uid)
-		print('here')
 		if device:
 			self.MqttManager.publish(
 				topic=constants.TOPIC_TOGGLE_DND,

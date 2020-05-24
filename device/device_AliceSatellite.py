@@ -32,10 +32,6 @@ class device_AliceSatellite(DeviceType):
 		self._broadcastTimer = None
 
 
-	def onStart(self):
-		super().onStart()
-
-
 	def onStop(self):
 		self.stopBroadcasting()
 		self._broadcastSocket.close()
@@ -57,6 +53,17 @@ class device_AliceSatellite(DeviceType):
 	def getDeviceConfig(self):
 		# return the custom configuration of that deviceType
 		pass
+
+
+	def toggle(self, device: Device):
+		# todo use functionality of the connected skill
+		# todo there is currently no feedback loop -> when should the image on the screen be changed?
+		self.MqttManager.publish(
+			topic=constants.TOPIC_TOGGLE_DND,
+			payload={
+				'uid': device.uid
+			}
+		)
 
 
 	@property
@@ -108,6 +115,7 @@ class device_AliceSatellite(DeviceType):
 
 				if device:
 					device.pairingDone(uid=uid)
+					self.logWarning(f'Device with uid {uid} successfully paired')
 				else:
 					if self.DeviceManager.addNewDevice(deviceTypeID=deviceType.id, locationID=location.id, uid=uid):
 						self.logInfo(f'New device with uid {uid} successfully added')
@@ -120,7 +128,7 @@ class device_AliceSatellite(DeviceType):
 
 				self.ThreadManager.doLater(interval=5, func=self.WakewordRecorder.uploadToNewDevice, args=[uid])
 
-				self._broadcastSocket.sendto(bytes(answer, encoding='utf8'), (deviceIp, self._broadcastPort))
+				self._broadcastSocket.sendto(bytes('ok', encoding='utf8'), (deviceIp, self._broadcastPort))
 				self.stopBroadcasting()
 			except socket.timeout:
 				self.logInfo('No device query received')

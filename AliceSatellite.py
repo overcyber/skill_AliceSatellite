@@ -2,6 +2,7 @@ from core.base.SuperManager import SuperManager
 from core.base.model.AliceSkill import AliceSkill
 from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import MqttHandler
+from core.commons import constants
 
 
 class AliceSatellite(AliceSkill):
