@@ -50,6 +50,20 @@ class AliceSatellite(AliceSkill):
 			self.DeviceManager.deviceDisconnecting(uid)
 
 
+	@MqttHandler('projectalice/devices/status')
+	def deviceStatus(self, session: DialogSession):
+		uid = session.payload.get('uid')
+		device = self.DeviceManager.getDeviceByUID(uid=uid)
+		if device.getDeviceType().skill != self.name:
+			return False
+		if 'dnd' in session.payload:
+			device.setCustomValue('dnd', session.payload.get('dnd', None))
+			refresh = True
+
+		if refresh:
+			self.publish('projectalice/devices/updated', payload={'id': device.id, 'type': 'status'})
+
+
 	def getSensorReadings(self):
 		self.publish('projectalice/devices/alice/getSensors')
 

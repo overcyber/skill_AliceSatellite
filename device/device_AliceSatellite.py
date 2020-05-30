@@ -44,10 +44,15 @@ class device_AliceSatellite(DeviceType):
 		pass
 
 
-	def getStatusTile(self):
-		# Return the tile representing the current status of the device:
-		# e.g. a light bulb can be on or off and display its status
-		pass
+	def getDeviceIcon(self, device: Device) -> str:
+		if not device.connected:
+			return 'satellite_offline.png'
+		self.logInfo(f'dnd: {device.getCustomValue("dnd")}')
+		if device.getCustomValue('dnd'):
+			return 'satellite_muted.png'
+		if not device.uid:
+			return 'device_AliceSatellite.png'
+		return 'satellite_online.png'
 
 
 	def getDeviceConfig(self):

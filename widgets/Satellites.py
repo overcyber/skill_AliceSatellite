@@ -15,7 +15,7 @@ class Satellites(Widget):
 
 
 	def getSatellites(self) -> dict:
-		return {device.id: device.toJson() for device in self.DeviceManager.getDevicesByType('AliceSatellite')}
+		return {device.id: device.toJson() for device in self.DeviceManager.getDevicesByType(self.DeviceManager.SAT_TYPE)}
 
 
 	def toggleMute(self, uid: str):
