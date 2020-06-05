@@ -39,9 +39,8 @@ class device_AliceSatellite(DeviceType):
 
 	### to reimplement for any device type
 	### Find A new Device
-	def discover(self, uid: str = None, device: Device = None, voiceSiteId: str = ""):
-		self.startBroadcastingForNewDevice(uid=uid, device=device, siteId=voiceSiteId)
-		pass
+	def discover(self, device: Device, uid:str, replyOnSiteId: str = "") -> bool:
+		return self.startBroadcastingForNewDevice(device=device, uid=uid, replyOnSiteId=replyOnSiteId)
 
 
 	def getDeviceIcon(self, device: Device) -> str:
@@ -62,7 +61,6 @@ class device_AliceSatellite(DeviceType):
 
 	def toggle(self, device: Device):
 		# todo use functionality of the connected skill
-		# todo there is currently no feedback loop -> when should the image on the screen be changed?
 		self.MqttManager.publish(
 			topic=constants.TOPIC_TOGGLE_DND,
 			payload={
@@ -76,16 +74,13 @@ class device_AliceSatellite(DeviceType):
 		return self._broadcastFlag
 
 
-	def startBroadcastingForNewDevice(self, siteId: str, uid: str = '', device: Device = None) -> bool:
+	def startBroadcastingForNewDevice(self, device: Device, uid: str, replyOnSiteId: str = "") -> bool:
 		if self.isBusy():
 			return False
 
-		if not uid:
-			uid = self.DeviceManager._getFreeUID()
-
-		self.logInfo(f'Started broadcasting on {self._broadcastPort} for new device addition. Attributed uid: {uid}')
+		self.logInfo(f'Started broadcasting on {self._broadcastPort} for new device addition. Attributed uid: {device.uid}')
 		self._listenSocket.listen(2)
-		self.ThreadManager.newThread(name='broadcast', target=self.startBroadcast, args=[uid, siteId, device])
+		self.ThreadManager.newThread(name='broadcast', target=self.startBroadcast, args=[device, uid, replyOnSiteId])
 
 		self._broadcastTimer = self.ThreadManager.newTimer(interval=300, func=self.stopBroadcasting)
 
@@ -103,7 +98,7 @@ class device_AliceSatellite(DeviceType):
 		self.broadcast(method=constants.EVENT_STOP_BROADCASTING_FOR_NEW_DEVICE, exceptions=[self.name], propagateToSkills=True)
 
 
-	def startBroadcast(self, uid: str, replyOnSiteId: str = "", device: Device = None):
+	def startBroadcast(self, device: Device, uid: str, replyOnSiteId: str = ""):
 		self._broadcastFlag.set()
 		location = device.getMainLocation()
 		while self._broadcastFlag.isSet():
@@ -118,18 +113,10 @@ class device_AliceSatellite(DeviceType):
 
 				deviceType = self.DeviceManager.getDeviceTypeByName(deviceTypeName)
 
-				if device:
-					device.pairingDone(uid=uid)
-					self.logWarning(f'Device with uid {uid} successfully paired')
-				else:
-					if self.DeviceManager.addNewDevice(deviceTypeID=deviceType.id, locationID=location.id, uid=uid):
-						self.logInfo(f'New device with uid {uid} successfully added')
-						if replyOnSiteId != "":
-							self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionSuccess'), client=replyOnSiteId)
-					else:
-						self.logWarning('Failed adding new device')
-						if replyOnSiteId != "":
-							self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionFailed'), client=replyOnSiteId)
+				device.pairingDone(uid=uid)
+				self.logWarning(f'Device with uid {uid} successfully paired')
+				if replyOnSiteId != "":
+					self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionSuccess'), client=replyOnSiteId)
 
 				self.ThreadManager.doLater(interval=5, func=self.WakewordRecorder.uploadToNewDevice, args=[uid])
 
