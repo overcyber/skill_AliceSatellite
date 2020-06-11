@@ -111,8 +111,6 @@ class device_AliceSatellite(DeviceType):
 				deviceIp = answer.split(':')[0]
 				deviceTypeName = answer.split(':')[1]
 
-				deviceType = self.DeviceManager.getDeviceTypeByName(deviceTypeName)
-
 				device.pairingDone(uid=uid)
 				self.logWarning(f'Device with uid {uid} successfully paired')
 				if replyOnSiteId != "":
