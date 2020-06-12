@@ -2,6 +2,7 @@ from core.base.SuperManager import SuperManager
 from core.base.model.AliceSkill import AliceSkill
 from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import MqttHandler
+from core.commons import constants
 
 
 class AliceSatellite(AliceSkill):
@@ -47,6 +48,20 @@ class AliceSatellite(AliceSkill):
 		uid = session.payload.get('uid')
 		if uid:
 			self.DeviceManager.deviceDisconnecting(uid)
+
+
+	@MqttHandler('projectalice/devices/status')
+	def deviceStatus(self, session: DialogSession):
+		uid = session.payload.get('uid')
+		device = self.DeviceManager.getDeviceByUID(uid=uid)
+		if device.getDeviceType().skill != self.name:
+			return False
+		if 'dnd' in session.payload:
+			device.setCustomValue('dnd', session.payload.get('dnd', None))
+			refresh = True
+
+		if refresh:
+			self.publish('projectalice/devices/updated', payload={'id': device.id, 'type': 'status'})
 
 
 	def getSensorReadings(self):
