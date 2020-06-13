@@ -1,6 +1,7 @@
 from core.device.model.Device import Device
 from core.device.model.Location import Location
 from core.device.model.DeviceType import DeviceType
+from core.dialog.model.DialogSession import DialogSession
 from core.commons import constants
 import sqlite3
 import threading
