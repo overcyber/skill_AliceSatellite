@@ -39,7 +39,7 @@ class device_AliceSatellite(DeviceType):
 
 	### to reimplement for any device type
 	### Find A new Device
-	def discover(self, device: Device, uid:str, replyOnSiteId: str = "") -> bool:
+	def discover(self, device: Device, uid:str, replyOnSiteId: str = "", session:DialogSession = None) -> bool:
 		return self.startBroadcastingForNewDevice(device=device, uid=uid, replyOnSiteId=replyOnSiteId)
 
 
