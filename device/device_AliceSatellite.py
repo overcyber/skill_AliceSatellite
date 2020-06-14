@@ -47,7 +47,6 @@ class device_AliceSatellite(DeviceType):
 	def getDeviceIcon(self, device: Device) -> str:
 		if not device.connected:
 			return 'satellite_offline.png'
-		self.logInfo(f'dnd: {device.getCustomValue("dnd")}')
 		if device.getCustomValue('dnd'):
 			return 'satellite_muted.png'
 		if not device.uid:
