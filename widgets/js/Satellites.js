@@ -16,6 +16,10 @@
 		type: 'POST'
 	}).done(function(devices) {
 		for (let id in devices) {
+			if (id === 'success') {
+				continue;
+			}
+
 			let device = JSON.parse(devices[id]);
 
 			let color = device['connected'] ? '--text' : 'red';
