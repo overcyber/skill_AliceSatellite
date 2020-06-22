@@ -1,12 +1,13 @@
 {
 	"name": "AliceSatellite",
-	"version": "1.3.3",	"icon": "fas fa-satellite",
+	"version": "1.3.3",
 	"category": "alice",
 	"author": "ProjectAlice",
 	"maintainers": [
 		"Psycho",
 		"Jierka",
-		"maxbachmann"
+		"maxbachmann",
+		"philipp2310"
 	],
 	"desc": "AliceSatellite is the official skill to support Project Alice satellites",
 	"aliceMinVersion": "1.0.0-b1",
