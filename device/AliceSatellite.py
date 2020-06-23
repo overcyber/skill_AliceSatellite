@@ -47,7 +47,7 @@ class AliceSatellite(DeviceType):
 		if device.getCustomValue('dnd'):
 			return 'satellite_muted.png'
 		if not device.uid:
-			return 'device_AliceSatellite.png'
+			return 'satellite.png'
 		return 'satellite_online.png'
 
 
@@ -86,12 +86,13 @@ class AliceSatellite(DeviceType):
 
 
 	def stopBroadcasting(self):
+		if not self.isBusy():
+			return
+
 		self.logInfo('Stopped broadcasting for new devices')
 		self._broadcastFlag.clear()
 
-		if self._broadcastTimer:
-			self._broadcastTimer.cancel()
-
+		self._broadcastTimer.cancel()
 		self.broadcast(method=constants.EVENT_STOP_BROADCASTING_FOR_NEW_DEVICE, exceptions=[self.name], propagateToSkills=True)
 
 
