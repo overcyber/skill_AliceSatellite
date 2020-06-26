@@ -1,17 +1,14 @@
-from core.device.model.Device import Device
-from core.device.model.Location import Location
-from core.device.model.DeviceType import DeviceType
-from core.dialog.model.DialogSession import DialogSession
-from core.commons import constants
+import socket
 import sqlite3
 import threading
-import socket
-from core.base.model.ProjectAliceObject import ProjectAliceObject
 
-class device_AliceSatellite(DeviceType):
+from core.commons import constants
+from core.device.model.Device import Device
+from core.device.model.DeviceType import DeviceType
+from core.dialog.model.DialogSession import DialogSession
 
-	DEV_SETTINGS = ""
-	LOC_SETTINGS = ""
+
+class AliceSatellite(DeviceType):
 
 	def __init__(self, data: sqlite3.Row):
 		super().__init__(data, self.DEV_SETTINGS, self.LOC_SETTINGS)
@@ -40,7 +37,7 @@ class device_AliceSatellite(DeviceType):
 
 	### to reimplement for any device type
 	### Find A new Device
-	def discover(self, device: Device, uid:str, replyOnSiteId: str = "", session:DialogSession = None) -> bool:
+	def discover(self, device: Device, uid: str, replyOnSiteId: str = '', session: DialogSession = None) -> bool:
 		return self.startBroadcastingForNewDevice(device=device, uid=uid, replyOnSiteId=replyOnSiteId)
 
 
@@ -50,7 +47,7 @@ class device_AliceSatellite(DeviceType):
 		if device.getCustomValue('dnd'):
 			return 'satellite_muted.png'
 		if not device.uid:
-			return 'device_AliceSatellite.png'
+			return 'satellite.png'
 		return 'satellite_online.png'
 
 
@@ -74,7 +71,7 @@ class device_AliceSatellite(DeviceType):
 		return self._broadcastFlag
 
 
-	def startBroadcastingForNewDevice(self, device: Device, uid: str, replyOnSiteId: str = "") -> bool:
+	def startBroadcastingForNewDevice(self, device: Device, uid: str, replyOnSiteId: str = '') -> bool:
 		if self.isBusy():
 			return False
 
@@ -89,16 +86,17 @@ class device_AliceSatellite(DeviceType):
 
 
 	def stopBroadcasting(self):
+		if not self.isBusy():
+			return
+
 		self.logInfo('Stopped broadcasting for new devices')
 		self._broadcastFlag.clear()
 
-		if self._broadcastTimer:
-			self._broadcastTimer.cancel()
-
+		self._broadcastTimer.cancel()
 		self.broadcast(method=constants.EVENT_STOP_BROADCASTING_FOR_NEW_DEVICE, exceptions=[self.name], propagateToSkills=True)
 
 
-	def startBroadcast(self, device: Device, uid: str, replyOnSiteId: str = ""):
+	def startBroadcast(self, device: Device, uid: str, replyOnSiteId: str = ''):
 		self._broadcastFlag.set()
 		location = device.getMainLocation()
 		while self._broadcastFlag.isSet():
@@ -109,11 +107,10 @@ class device_AliceSatellite(DeviceType):
 				answer = sock.recv(1024).decode()
 
 				deviceIp = answer.split(':')[0]
-				deviceTypeName = answer.split(':')[1]
 
 				device.pairingDone(uid=uid)
 				self.logWarning(f'Device with uid {uid} successfully paired')
-				if replyOnSiteId != "":
+				if replyOnSiteId:
 					self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionSuccess'), client=replyOnSiteId)
 
 				self.ThreadManager.doLater(interval=5, func=self.WakewordRecorder.uploadToNewDevice, args=[uid])
