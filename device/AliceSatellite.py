@@ -47,7 +47,7 @@ class AliceSatellite(DeviceType):
 		if device.getCustomValue('dnd'):
 			return 'satellite_muted.png'
 		if not device.uid:
-			return 'satellite.png'
+			return 'AliceSatellite.png'
 		return 'satellite_online.png'
 
 
