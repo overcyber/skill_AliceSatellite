@@ -25,7 +25,14 @@
 			let color = device['connected'] ? '--text' : 'red';
 			let $tile = $('<div class="tile" id="' + device['uid'] + '"><div class="Satellites_tile_deviceName ' + color + '">' + device['room'] + '</div>');
 
-			let $button = $('<div class="Satellites_tile_muteUnmute"><i class="fas fa-microphone-alt fa-4x" aria-hidden="true" id="Satellites_muteUnmute_' + device['uid'] + '"></i></div>');
+			//
+			let micClass = "fas fa-microphone-alt fa-4x";
+			if(device['custom']['dnd']){
+				micClass = "fas fa-microphone-alt-slash fa-4x";
+			}
+
+			//
+			let $button = $('<div class="Satellites_tile_muteUnmute"><i class="'+micClass+'" aria-hidden="true" id="Satellites_muteUnmute_' + device['uid'] + '"></i></div>');
 			$button.on('click touchstart', function(){
 				$.ajax({
 					url: '/home/widget/',
@@ -56,6 +63,7 @@
 		MQTT.subscribe('projectalice/devices/toggleListen');
 		MQTT.subscribe('projectalice/devices/disconnection');
 		MQTT.subscribe('projectalice/devices/greeting');
+	//	MQTT.subscribe('projectalice/devices/status');
 	}
 
 	function deadSatellite(uid) {
@@ -99,6 +107,11 @@
 		} else if (msg.topic == 'projectalice/devices/greeting') {
 			satelliteLife(payload['uid']);
 		}
+		// else if (msg.topic == 'projectalice/devices/status') {
+		//	if('dnd' in payload) {
+		//		satelliteStatus(payload['uid'], payload['dnd'])
+		//	}
+		//}
 	}
 
 	mqttRegisterSelf(onConnect, 'onConnect');
