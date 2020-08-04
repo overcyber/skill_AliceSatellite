@@ -14,3 +14,4 @@ AliceSatellite is the official skill to support Project Alice satellites
   - fr
   - de
   - it
+ 
