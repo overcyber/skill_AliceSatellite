@@ -3,6 +3,16 @@
 	let timer;
 	let timerStarted = false;
 
+	let topics = [
+		'projectalice/devices/heartbeat',
+		'projectalice/devices/stopListen',
+		'projectalice/devices/startListen',
+		'projectalice/devices/toggleListen',
+		'projectalice/devices/disconnection',
+		'projectalice/devices/greeting',
+		'projectalice/devices/status'
+	]
+
 	$.ajax({
 		url: '/home/widget/',
 		data: JSON.stringify({
@@ -57,13 +67,9 @@
 	});
 
 	function onConnect() {
-		MQTT.subscribe('projectalice/devices/heartbeat');
-		MQTT.subscribe('projectalice/devices/stopListen');
-		MQTT.subscribe('projectalice/devices/startListen');
-		MQTT.subscribe('projectalice/devices/toggleListen');
-		MQTT.subscribe('projectalice/devices/disconnection');
-		MQTT.subscribe('projectalice/devices/greeting');
-	//	MQTT.subscribe('projectalice/devices/status');
+		for (const topic in topics) {
+			MQTT.subscribe(topic);
+		}
 	}
 
 	function deadSatellite(uid) {
@@ -89,6 +95,10 @@
 	}
 
 	function onMessage(msg) {
+		if (!topics.includes(msg.topic) || !msg.payloadString) {
+			return;
+		}
+
 		let payload = JSON.parse(msg.payloadString);
 		if (msg.topic === 'projectalice/devices/heartbeat') {
 			satelliteLife(payload['uid']);
