@@ -6,6 +6,7 @@ from core.commons import constants
 from core.device.model.Device import Device
 from core.device.model.DeviceType import DeviceType
 from core.dialog.model.DialogSession import DialogSession
+from core.device.model.DeviceException import DeviceNotPaired
 
 
 class AliceSatellite(DeviceType):
@@ -57,13 +58,16 @@ class AliceSatellite(DeviceType):
 
 
 	def toggle(self, device: Device):
+		if device.uid:
 		# todo use functionality of the connected skill
-		self.MqttManager.publish(
-			topic=constants.TOPIC_TOGGLE_DND,
-			payload={
-				'uid': device.uid
-			}
-		)
+			self.MqttManager.publish(
+				topic=constants.TOPIC_TOGGLE_DND,
+				payload={
+					'uid': device.uid
+				}
+			)
+		else:
+			raise DeviceNotPaired()
 
 
 	@property
