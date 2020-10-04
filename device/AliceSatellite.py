@@ -115,7 +115,7 @@ class AliceSatellite(DeviceType):
 				device.pairingDone(uid=uid)
 				self.logWarning(f'Device with uid {uid} successfully paired')
 				if replyOnSiteId:
-					self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionSuccess'), client=replyOnSiteId)
+					self.MqttManager.say(text=self.TalkManager.randomTalk('newDeviceAdditionSuccess', skill='system'), client=replyOnSiteId)
 
 				self.ThreadManager.doLater(interval=5, func=self.WakewordRecorder.uploadToNewDevice, args=[uid])
 
