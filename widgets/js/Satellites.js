@@ -67,9 +67,9 @@
 	});
 
 	function onConnect() {
-		for (const topic in topics) {
+		topics.forEach(function(topic) {
 			MQTT.subscribe(topic);
-		}
+		});
 	}
 
 	function deadSatellite(uid) {
