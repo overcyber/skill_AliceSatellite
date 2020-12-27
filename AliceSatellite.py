@@ -1,14 +1,27 @@
 from core.base.SuperManager import SuperManager
 from core.base.model.AliceSkill import AliceSkill
+from core.device.model.DeviceAbility import DeviceAbility
 from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import MqttHandler
 
 
 class AliceSatellite(AliceSkill):
 
+	DEVICES = {
+		'AliceSatellite': {
+			'deviceTypeName'    : 'AliceSatellite',
+			'perLocationLimit'  : 1,
+			'totalDeviceLimit'  : 0,
+			'allowLocationLinks': True,
+			'heartbeatRate'     : 5,
+			'deviceSettings'    : dict(),
+			'abilities'         : [DeviceAbility.PLAY_SOUND, DeviceAbility.CAPTURE_SOUND]
+		}
+	}
+
 	def __init__(self):
 		self._sensorReadings = dict()
-		super().__init__()
+		super().__init__(devices=self.DEVICES)
 
 
 	def onBooted(self):
