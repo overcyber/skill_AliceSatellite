@@ -14,7 +14,7 @@ class AliceSatellite(Device):
 
 	def getDeviceIcon(self) -> Path:
 		if not self.connected:
-			return Path(f'{self.Commons.rootDir()}/skills/{self.skillName}/device/img/{self.typeName}.png')
+			return Path(f'{self.Commons.rootDir()}/skills/{self.skillName}/device/img/{self.deviceTypeName}.png')
 		elif self.connected:
 			return Path(f'{self.Commons.rootDir()}/skills/{self.skillName}/device/img/connected.png')
 
