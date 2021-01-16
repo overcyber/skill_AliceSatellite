@@ -1,27 +1,14 @@
 from core.base.SuperManager import SuperManager
 from core.base.model.AliceSkill import AliceSkill
-from core.device.model.DeviceAbility import DeviceAbility
 from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import MqttHandler
 
 
 class AliceSatellite(AliceSkill):
 
-	DEVICES = {
-		'AliceSatellite': {
-			'deviceTypeName'    : 'AliceSatellite',
-			'perLocationLimit'  : 1,
-			'totalDeviceLimit'  : 0,
-			'allowLocationLinks': True,
-			'heartbeatRate'     : 5,
-			'deviceSettings'    : dict(),
-			'abilities'         : [DeviceAbility.PLAY_SOUND, DeviceAbility.CAPTURE_SOUND]
-		}
-	}
-
 	def __init__(self):
 		self._sensorReadings = dict()
-		super().__init__(devices=self.DEVICES)
+		super().__init__()
 
 
 	def onBooted(self):
@@ -52,7 +39,7 @@ class AliceSatellite(AliceSkill):
 	def feedbackSensorIntent(self, session: DialogSession):
 		data = session.payload.get('data')
 		if data:
-			self._sensorReadings[session.siteId] = data
+			self._sensorReadings[session.sessionId] = data
 
 
 	@MqttHandler('projectalice/devices/disconnection')
