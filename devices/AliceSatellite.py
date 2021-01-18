@@ -15,8 +15,8 @@ class AliceSatellite(Device):
 			'perLocationLimit'      : 1,
 			'totalDeviceLimit'      : 0,
 			'allowLocationLinks'    : True,
-			'allowHeartbeatOverride': True,
-			'heartbeatRate'         : 5,
+			'allowHeartbeatOverride': False,
+			'heartbeatRate'         : 2,
 			'deviceSettings'        : dict(),
 			'abilities'             : [DeviceAbility.PLAY_SOUND, DeviceAbility.CAPTURE_SOUND]
 		}
