@@ -24,10 +24,3 @@ class AliceSatellite(Device):
 
 	def __init__(self, data: Union[sqlite3.Row, Dict]):
 		super().__init__(data)
-
-
-	def getDeviceIcon(self) -> Path:
-		if not self.connected:
-			return super().getDeviceIcon()
-		else:
-			return Path(f'{self.Commons.rootDir()}/skills/{self.skillName}/devices/img/connected.png')
