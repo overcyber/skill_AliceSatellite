@@ -1,7 +1,7 @@
 import sqlite3
 
-from core.base.model.Widget import Widget
-from core.base.model.WidgetSizes import WidgetSizes
+from core.webui.model.Widget import Widget
+from core.webui.model.WidgetSizes import WidgetSizes
 from core.commons import constants
 
 

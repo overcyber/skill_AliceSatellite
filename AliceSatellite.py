@@ -39,7 +39,7 @@ class AliceSatellite(AliceSkill):
 	def feedbackSensorIntent(self, session: DialogSession):
 		data = session.payload.get('data')
 		if data:
-			self._sensorReadings[session.siteId] = data
+			self._sensorReadings[session.sessionId] = data
 
 
 	@MqttHandler('projectalice/devices/disconnection')
