@@ -1,7 +1,3 @@
-import sqlite3
-from pathlib import Path
-from typing import Dict, Union
-
 from core.device.model.Device import Device
 from core.device.model.DeviceAbility import DeviceAbility
 
@@ -20,7 +16,3 @@ class AliceSatellite(Device):
 			'deviceSettings'        : dict(),
 			'abilities'             : [DeviceAbility.PLAY_SOUND, DeviceAbility.CAPTURE_SOUND]
 		}
-
-
-	def __init__(self, data: Union[sqlite3.Row, Dict]):
-		super().__init__(data)
