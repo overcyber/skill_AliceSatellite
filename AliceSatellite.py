@@ -14,7 +14,7 @@ class AliceSatellite(AliceSkill):
 	def onBooted(self):
 		confManager = SuperManager.getInstance().configManager
 		if confManager.configAliceExists('onReboot') and confManager.getAliceConfigByName('onReboot') == 'greetAndRebootDevices':
-			self.DeviceManager.broadcastToDevices(
+			self.MqttManager.mqttBroadcast(
 				topic='projectalice/devices/restart'
 			)
 
@@ -52,14 +52,14 @@ class AliceSatellite(AliceSkill):
 	@MqttHandler('projectalice/devices/status')
 	def deviceStatus(self, session: DialogSession):
 		uid = session.payload.get('uid')
-		device = self.DeviceManager.getDeviceByUID(uid=uid)
+		device = self.DeviceManager.getDevice(uid=uid)
 		refresh = False
 
-		if device.getDeviceType().skill != self.name:
+		if device.skillName != self.name:
 			return
 
 		if 'dnd' in session.payload:
-			device.setCustomValue('dnd', session.payload.get('dnd', None))
+			device.updateParams('dnd', session.payload.get('dnd', None))
 			refresh = True
 
 		if refresh:
@@ -70,9 +70,9 @@ class AliceSatellite(AliceSkill):
 		self.publish('projectalice/devices/alice/getSensors')
 
 
-	def temperatureAt(self, siteId: str) -> str:
-		return self.getSensorValue(siteId, 'temperature')
+	def temperatureAt(self, deviceUid: str) -> str:
+		return self.getSensorValue(deviceUid, 'temperature')
 
 
-	def getSensorValue(self, siteId: str, value: str) -> str:
-		return self._sensorReadings.get(siteId, dict()).get(value, 'undefined')
+	def getSensorValue(self, deviceUid: str, value: str) -> str:
+		return self._sensorReadings.get(deviceUid, dict()).get(value, 'undefined')
