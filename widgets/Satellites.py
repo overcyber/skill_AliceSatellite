@@ -1,8 +1,7 @@
 import sqlite3
-
+from core.commons import constants
 from core.webui.model.Widget import Widget
 from core.webui.model.WidgetSizes import WidgetSizes
-from core.commons import constants
 
 
 class Satellites(Widget):
@@ -15,11 +14,11 @@ class Satellites(Widget):
 
 
 	def getSatellites(self) -> dict:
-		return {device.id: device.toJson() for device in self.DeviceManager.getDevicesByType(self.DeviceManager.SAT_TYPE)}
+		return {device.id: device.toDict() for device in self.DeviceManager.getDevicesBySkill(skillName=self.skillInstance.name)}
 
 
 	def toggleMute(self, uid: str):
-		device = self.DeviceManager.getDeviceByUID(uid)
+		device = self.DeviceManager.getDevice(uid=uid)
 		if device:
 			self.MqttManager.publish(
 				topic=constants.TOPIC_TOGGLE_DND,

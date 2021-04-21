@@ -22,4 +22,5 @@
 	box-sizing: border-box;
 	box-shadow: none;
 	display: flex;
+	flex-direction: column-reverse;
 }
