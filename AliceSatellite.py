@@ -59,7 +59,7 @@ class AliceSatellite(AliceSkill):
 			return
 
 		if 'dnd' in session.payload:
-			device.updateParams('dnd', session.payload.get('dnd', None))
+			device.updateParam('dnd', session.payload.get('dnd', None))
 			refresh = True
 
 		if refresh:

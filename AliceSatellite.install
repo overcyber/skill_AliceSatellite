@@ -1,7 +1,7 @@
 {
     "name": "AliceSatellite",
     "icon": "fas fa-satellite",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "category": "alice",
     "author": "ProjectAlice",
     "maintainers": [
