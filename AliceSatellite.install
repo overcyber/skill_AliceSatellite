@@ -1,7 +1,7 @@
 {
     "name": "AliceSatellite",
     "icon": "fas fa-satellite",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "category": "alice",
     "author": "ProjectAlice",
     "maintainers": [
@@ -11,7 +11,7 @@
         "philipp2310"
     ],
     "desc": "AliceSatellite is the official skill to support Project Alice satellites",
-    "aliceMinVersion": "1.0.0-rc1",
+    "aliceMinVersion": "1.0.0-rc3",
     "systemRequirements": [],
     "pipRequirements": [],
     "conditions": {

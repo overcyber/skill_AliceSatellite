@@ -12,7 +12,7 @@ class AliceSatellite(AliceSkill):
 
 
 	def onBooted(self):
-		confManager = SuperManager.getInstance().configManager
+		confManager = SuperManager.getInstance().ConfigManager
 		if confManager.configAliceExists('onReboot') and confManager.getAliceConfigByName('onReboot') == 'greetAndRebootDevices':
 			self.MqttManager.mqttBroadcast(
 				topic='projectalice/devices/restart'
